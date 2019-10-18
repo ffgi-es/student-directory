@@ -41,7 +41,7 @@ def input_students
     # exit loop if no name is supplied
     break if name.empty?
     students << {name: name, cohort: :november}
-    puts "Now we have #{students.count} students"
+    puts "We have added #{students.count} students so far"
   end
   # return the array of students
   students
