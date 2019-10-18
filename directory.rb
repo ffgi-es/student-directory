@@ -52,7 +52,7 @@ def input_students
     # exit loop if no name is supplied
     break if name.empty?
     add_student name
-    puts "We have added #{@students.count} students so far"
+    puts "We have #{@students.count} students so far"
   end
 end
 
