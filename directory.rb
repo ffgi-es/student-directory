@@ -61,12 +61,14 @@ def save_students
   file = File.open("students.csv", "w")
   # write each students data in the file
   @students.each do |student|
-    student_data = [student[:name], student[:cohort]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
+    file.puts student_to_csv(student)
   end
   # close the file once finished
   file.close
+end
+
+def student_to_csv(student)
+  [student[:name], student[:cohort]].join(",")
 end
 
 def load_students(filename = "students.csv")
