@@ -12,6 +12,7 @@ def print_menu
   puts "1. input the students"
   puts "2. show the students"
   puts "3. save the list to students.csv"
+  puts "4. load the list from student.csv"
   puts "9. exit"
   print "[option]: "
 end
@@ -26,6 +27,8 @@ def process(option)
     print_count
   when "3"
     save_students
+  when "4"
+    load_students
   when "9"
     exit 0
   else
@@ -59,6 +62,18 @@ def save_students
     file.puts csv_line
   end
   # close the file once finished
+  file.close
+end
+
+def load_students
+  # open the file to read data
+  file = File.open("students.csv", "r")
+  # read each line from file and add it to the student list
+  file.readlines.each do |line|
+    name, cohort = line.chomp.split(",")
+    @students << {name: name, cohort: cohort.to_sym}
+  end
+  # close the file
   file.close
 end
 
