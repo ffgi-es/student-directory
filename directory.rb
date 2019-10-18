@@ -1,4 +1,8 @@
 @students = []
+def students_string
+  word = @students.count == 1 ? " student" : " students"
+  @students.count.to_s + word
+end
 
 def interactive_menu
   loop do
@@ -8,6 +12,9 @@ def interactive_menu
 end
 
 def print_menu
+  puts
+  puts "================================"
+  puts
   puts "Select and option:"
   puts "1. input the students"
   puts "2. show the students"
@@ -27,13 +34,14 @@ def process(option)
     print_count
   when "3"
     save_students
+    puts students_string + " saved to students.csv"
   when "4"
     load_students
+    puts "We now have " + students_string
   when "9"
     exit 0
   else
-    print "I don't understand (<Return> to cont.)"
-    STDIN.gets
+    print "I don't understand"
   end
 end
 
@@ -52,7 +60,7 @@ def input_students
     # exit loop if no name is supplied
     break if name.empty?
     add_student name
-    puts "We have #{@students.count} students so far"
+    puts "We have " + students_string + " so far"
   end
 end
 
@@ -88,7 +96,7 @@ def try_load_students
   filename = ARGV.first.nil? ? "students.csv" : ARGV.first
   if File.exist?(filename)
     load_students(filename)
-    puts "Loaded #{@students.count} from #{filename}"
+    puts "Loaded " + students_string + " from #{filename}"
   elsif filename != "students.csv"
     puts "Sorry, #{filename} doesn't exist"
     exit 1
@@ -96,8 +104,10 @@ def try_load_students
 end
 
 def print_header
+  puts
+  puts "================================="
   puts "The students of Villains Academy"
-  puts "-------------"
+  puts "---------------------------------"
 end
 
 def print_students
@@ -105,7 +115,9 @@ def print_students
 end
 
 def print_count
-  puts "Overall, we have #{@students.size} great students"
+  num, word = students_string.split
+  puts
+  puts "Overall, we have #{num} great #{word}"
 end
 
 try_load_students
