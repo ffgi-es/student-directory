@@ -1,3 +1,4 @@
+@filename = "students.csv"
 @students = []
 def students_string
   word = @students.count == 1 ? " student" : " students"
@@ -33,16 +34,27 @@ def process(option)
     print_students
     print_count
   when "3"
-    save_students
+    save_students prompt_filename("save")
     puts students_string + " saved to students.csv"
   when "4"
-    load_students
-    puts "We now have " + students_string
+    if load_students prompt_filename("load")
+      puts "We now have " + students_string
+    else
+      puts "Couldn't open that file"
+    end
   when "9"
     exit 0
   else
     print "I don't understand"
   end
+end
+
+def prompt_filename(action)
+  puts "Where would you like to #{action}?"
+  puts "Leave blank for default (#{@filename})"
+  filename = STDIN.gets.chomp
+  # if they don't provide one, use default set at startup
+  filename.empty? ? @filename : filename
 end
 
 def add_student(name, cohort = :november)
@@ -64,9 +76,9 @@ def input_students
   end
 end
 
-def save_students
+def save_students(filename = @filename)
   # open the file to write data
-  file = File.open("students.csv", "w")
+  file = File.open(filename, "w")
   # write each students data in the file
   @students.each do |student|
     file.puts student_to_csv(student)
@@ -79,27 +91,29 @@ def student_to_csv(student)
   [student[:name], student[:cohort]].join(",")
 end
 
-def load_students(filename = "students.csv")
-  # open the file to read data
-  file = File.open(filename, "r")
-  # read each line from file and add it to the student list
-  file.readlines.each do |line|
-    name, cohort = line.chomp.split(",")
-    add_student name, cohort.to_sym
+def load_students(filename = @filename)
+  if File.exist?(filename)
+    # open the file to read data
+    file = File.open(filename, "r")
+    # read each line from file and add it to the student list
+    file.readlines.each do |line|
+      name, cohort = line.chomp.split(",")
+      add_student name, cohort.to_sym
+    end
+    # close the file
+    file.close
+    return true
+  else
+    return false
   end
-  # close the file
-  file.close
 end
 
 def try_load_students
   # if a filename isn't supplied, default to students.csv
-  filename = ARGV.first.nil? ? "students.csv" : ARGV.first
-  if File.exist?(filename)
-    load_students(filename)
-    puts "Loaded " + students_string + " from #{filename}"
-  elsif filename != "students.csv"
-    puts "Sorry, #{filename} doesn't exist"
-    exit 1
+  @filename = ARGV.first unless ARGV.first.nil?
+  if File.exist?(@filename)
+    load_students(@filename)
+    puts "Loaded " + students_string + " from #{@filename}"
   end
 end
 
