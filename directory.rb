@@ -37,6 +37,10 @@ def process(option)
   end
 end
 
+def add_student(name, cohort = :november)
+  @students << {name: name, cohort: cohort}
+end
+
 def input_students
   puts "Please enter the names of the students"
   puts "To finish just hit return twice"
@@ -47,7 +51,7 @@ def input_students
     name = STDIN.gets.chomp
     # exit loop if no name is supplied
     break if name.empty?
-    @students << {name: name, cohort: :november}
+    add_student name
     puts "We have added #{@students.count} students so far"
   end
 end
@@ -71,7 +75,7 @@ def load_students(filename = "students.csv")
   # read each line from file and add it to the student list
   file.readlines.each do |line|
     name, cohort = line.chomp.split(",")
-    @students << {name: name, cohort: cohort.to_sym}
+    add_student name, cohort.to_sym
   end
   # close the file
   file.close
