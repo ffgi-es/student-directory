@@ -23,7 +23,7 @@ def print_header
   puts "-------------"
 end
 
-def print(students)
+def print_students(students)
   students.each { |student| puts "#{student[:name]} (#{student[:cohort]})"}
 end
 
@@ -34,5 +34,5 @@ end
 # print formatted list of names
 students = input_students
 print_header
-print(students)
+print_students(students)
 print_count(students)
