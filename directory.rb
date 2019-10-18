@@ -11,6 +11,7 @@ def print_menu
   puts "Select and option:"
   puts "1. input the students"
   puts "2. show the students"
+  puts "3. save the list to students.csv"
   puts "9. exit"
   print "[option]: "
 end
@@ -23,6 +24,8 @@ def process(option)
     print_header
     print_students
     print_count
+  when "3"
+    save_students
   when "9"
     exit 0
   else
@@ -44,6 +47,19 @@ def input_students
     @students << {name: name, cohort: :november}
     puts "We have added #{@students.count} students so far"
   end
+end
+
+def save_students
+  # open the file to write data
+  file = File.open("students.csv", "w")
+  # write each students data in the file
+  @students.each do |student|
+    student_data = [student[:name], student[:cohort]]
+    csv_line = student_data.join(",")
+    file.puts csv_line
+  end
+  # close the file once finished
+  file.close
 end
 
 def print_header
